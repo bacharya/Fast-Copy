@@ -79,12 +79,19 @@ if __name__ == '__main__' :
         if i == (split_size-1):
             dst_fp[i] = stat.st_size
 
+    jobs = []
     for i in range(0,split_size):
         th1 = Thread(target=file_copy, name='Thread-1', args=(src_fp[i], dst_fp[i], host, port))
         port = port+1
-        th1.start()
+        jobs.append(th1)
 
-    th1.join()
+    for t in jobs:
+        t.start()
+
+    for t in jobs:
+        t.join()
+
+    #th1.join()
     time.sleep(2)
     stop = time.localtime()
     print time.strftime("%y-%m-%d %H%M%S", stop) 
