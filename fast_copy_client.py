@@ -33,10 +33,11 @@ def file_transfer_handshake(host, port, filename, file_size, split_size):
     """
     This module for initial application handshake, where filename, filesize and split-size are exchanged.
     """
+    fname = filename.split("/")
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, port))    
 
-    data = filename+"+"+str(file_size)+"+"+str(split_size)
+    data = fname[-1]+"+"+str(file_size)+"+"+str(split_size)
     length = s.send(data)
 
     s.close()
