@@ -61,7 +61,7 @@ if __name__ == '__main__' :
 
     stat = os.stat(src_file)
 
-    print "file size is {}".format(stat.st_size) 
+    print "file size is {0}".format(stat.st_size) 
     file_transfer_handshake(host, port, src_file, stat.st_size, split_size)
     time.sleep(2)
     src_fp = list()
