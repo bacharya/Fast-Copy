@@ -34,7 +34,6 @@ At sender side :
     -p PORT, --port PORT  Specify the destination port
     -s SPLITSIZE, --splitsize SPLITSIZE
                           Specify the number of split-size for simultaneous copy
-
   e.g. : 
 
   # python fast_copy_client.py -f pyshark-0.4.2.2.tar.gz -H 10.10.10.10 -p 15000 
