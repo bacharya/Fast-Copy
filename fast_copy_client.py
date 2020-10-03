@@ -33,10 +33,11 @@ def file_transfer_handshake(host, port, filename, file_size, split_size):
     """
     This module for initial application handshake, where filename, filesize and split-size are exchanged.
     """
+    fname = filename.split("/")
     s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
     s.connect((host, port))    
 
-    data = filename+"+"+str(file_size)+"+"+str(split_size)
+    data = fname[-1]+"+"+str(file_size)+"+"+str(split_size)
     length = s.send(data)
 
     s.close()
@@ -60,7 +61,7 @@ if __name__ == '__main__' :
 
     stat = os.stat(src_file)
 
-    print "file size is {}".format(stat.st_size) 
+    print "file size is {0}".format(stat.st_size) 
     file_transfer_handshake(host, port, src_file, stat.st_size, split_size)
     time.sleep(2)
     src_fp = list()
@@ -79,12 +80,19 @@ if __name__ == '__main__' :
         if i == (split_size-1):
             dst_fp[i] = stat.st_size
 
+    jobs = []
     for i in range(0,split_size):
         th1 = Thread(target=file_copy, name='Thread-1', args=(src_fp[i], dst_fp[i], host, port))
         port = port+1
-        th1.start()
+        jobs.append(th1)
 
-    th1.join()
+    for t in jobs:
+        t.start()
+
+    for t in jobs:
+        t.join()
+
+    #th1.join()
     time.sleep(2)
     stop = time.localtime()
     print time.strftime("%y-%m-%d %H%M%S", stop) 

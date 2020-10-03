@@ -73,12 +73,18 @@ if __name__ == "__main__":
         fp2.seek(offset, origin)
         dst_fp.append(fp2)
 
+    jobs = []
     for i in range(0,split_size):
-        th1 = threading.Thread(target=file_receive, name='Thread-1', args=(dst_sock[i], dst_fp[i],port))
+        th = threading.Thread(target=file_receive, name='Thread-1', args=(dst_sock[i], dst_fp[i],port))
         port = port+1
-        th1.start()
+        jobs.append(th)
 
-    th1.join()
+    for t in jobs:
+        t.start()
+
+    for t in jobs:
+        t.join()
+
     time.sleep(1)
     stat = os.stat(dst_file)
     if threading.active_count() == 1:
